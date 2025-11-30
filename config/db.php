@@ -1,15 +1,19 @@
-<?php
 
-// ====== UBAH SESUAI KONFIGURASI ANDA ======
+<?php
 $host = 'localhost';
 $port = '5432';
-$dbname = 'cantabu';     // atau nama DB yang kamu pakai (mis: 'labdb')
-$user = 'postgres';       // username PostgreSQL
+$dbname = 'postgres';    
+$user = 'postgres';       
 $password = '7541305';
-// ==========================================
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+try {
+    $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+    $pdo->exec("SET search_path TO cantabu, public");
+} catch (PDOException $e) {
+    die('Koneksi DB gagal: ' . htmlspecialchars($e->getMessage()));
+}
 
-$conn_str = "host=$host port=$port dbname=$dbname user=$user password=$password";
-$conn = pg_connect($conn_str);
+?>
